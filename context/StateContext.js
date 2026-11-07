@@ -1,7 +1,26 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 import { toast } from 'react-hot-toast';
 
-const Context = createContext();
+const defaultState = {
+  showCart: false,
+  setShowCart: () => {},
+  cartItems: [],
+  totalPrice: 0,
+  totalQuantities: 0,
+  qty: 1,
+  setQty: () => {},
+  incQty: () => {},
+  decQty: () => {},
+  onAdd: () => {},
+  toggleCartItemQuantity: () => {},
+  toggleCartItemQuanitity: () => {},
+  onRemove: () => {},
+  setCartItems: () => {},
+  setTotalPrice: () => {},
+  setTotalQuantities: () => {}
+};
+
+const Context = createContext(defaultState);
 
 export const StateContext = ({ children }) => {
   const [showCart, setShowCart] = useState(false);
@@ -10,71 +29,76 @@ export const StateContext = ({ children }) => {
   const [totalQuantities, setTotalQuantities] = useState(0);
   const [qty, setQty] = useState(1);
 
-  let foundProduct;
-  let index;
-
   const onAdd = (product, quantity) => {
-    const checkProductInCart = cartItems.find((item) => item._id === product._id);
-    
-    setTotalPrice((prevTotalPrice) => prevTotalPrice + product.price * quantity);
-    setTotalQuantities((prevTotalQuantities) => prevTotalQuantities + quantity);
-    
-    if(checkProductInCart) {
-      const updatedCartItems = cartItems.map((cartProduct) => {
-        if(cartProduct._id === product._id) return {
-          ...cartProduct,
-          quantity: cartProduct.quantity + quantity
-        }
-      })
+    if (!product) return;
+    // Input Validation: strictly clamp quantity to a valid positive integer between 1 and 20
+    const addCount = Math.max(1, Math.min(20, Math.floor(Number(quantity) || 1)));
 
-      setCartItems(updatedCartItems);
-    } else {
-      product.quantity = quantity;
-      
-      setCartItems([...cartItems, { ...product }]);
-    }
+    setTotalPrice((prev) => prev + product.price * addCount);
+    setTotalQuantities((prev) => prev + addCount);
 
-    toast.success(`${qty} ${product.name} added to the cart.`);
-  } 
+    setCartItems((prevItems) => {
+      const existingItem = prevItems.find((item) => item._id === product._id);
+      if (existingItem) {
+        return prevItems.map((item) =>
+          item._id === product._id
+            ? { ...item, quantity: item.quantity + addCount }
+            : item
+        );
+      }
+      return [...prevItems, { ...product, quantity: addCount }];
+    });
+
+    const label = addCount > 1 ? `${addCount} × ${product.name}` : product.name;
+    toast.success(`${label} added to your bag`);
+  };
 
   const onRemove = (product) => {
-    foundProduct = cartItems.find((item) => item._id === product._id);
-    const newCartItems = cartItems.filter((item) => item._id !== product._id);
+    if (!product) return;
+    const target = cartItems.find((item) => item._id === product._id);
+    if (!target) return;
 
-    setTotalPrice((prevTotalPrice) => prevTotalPrice -foundProduct.price * foundProduct.quantity);
-    setTotalQuantities(prevTotalQuantities => prevTotalQuantities - foundProduct.quantity);
-    setCartItems(newCartItems);
-  }
+    setTotalPrice((prev) => Math.max(0, prev - target.price * target.quantity));
+    setTotalQuantities((prev) => Math.max(0, prev - target.quantity));
+    setCartItems((prev) => prev.filter((item) => item._id !== product._id));
+  };
 
-  const toggleCartItemQuanitity = (id, value) => {
-    foundProduct = cartItems.find((item) => item._id === id)
-    index = cartItems.findIndex((product) => product._id === id);
-    const newCartItems = cartItems.filter((item) => item._id !== id)
+  const toggleCartItemQuantity = (id, value) => {
+    const target = cartItems.find((item) => item._id === id);
+    if (!target) return;
 
-    if(value === 'inc') {
-      setCartItems([...newCartItems, { ...foundProduct, quantity: foundProduct.quantity + 1 } ]);
-      setTotalPrice((prevTotalPrice) => prevTotalPrice + foundProduct.price)
-      setTotalQuantities(prevTotalQuantities => prevTotalQuantities + 1)
-    } else if(value === 'dec') {
-      if (foundProduct.quantity > 1) {
-        setCartItems([...newCartItems, { ...foundProduct, quantity: foundProduct.quantity - 1 } ]);
-        setTotalPrice((prevTotalPrice) => prevTotalPrice - foundProduct.price)
-        setTotalQuantities(prevTotalQuantities => prevTotalQuantities - 1)
+    if (value === 'inc') {
+      if (target.quantity >= 20) {
+        toast.error('Maximum quantity limit (20 units) reached.');
+        return;
+      }
+      setCartItems((prev) =>
+        prev.map((item) =>
+          item._id === id ? { ...item, quantity: item.quantity + 1 } : item
+        )
+      );
+      setTotalPrice((prev) => prev + target.price);
+      setTotalQuantities((prev) => prev + 1);
+    } else if (value === 'dec') {
+      if (target.quantity > 1) {
+        setCartItems((prev) =>
+          prev.map((item) =>
+            item._id === id ? { ...item, quantity: item.quantity - 1 } : item
+          )
+        );
+        setTotalPrice((prev) => Math.max(0, prev - target.price));
+        setTotalQuantities((prev) => Math.max(0, prev - 1));
       }
     }
-  }
+  };
 
   const incQty = () => {
     setQty((prevQty) => prevQty + 1);
-  }
+  };
 
   const decQty = () => {
-    setQty((prevQty) => {
-      if(prevQty - 1 < 1) return 1;
-     
-      return prevQty - 1;
-    });
-  }
+    setQty((prevQty) => (prevQty - 1 < 1 ? 1 : prevQty - 1));
+  };
 
   return (
     <Context.Provider
@@ -85,19 +109,21 @@ export const StateContext = ({ children }) => {
         totalPrice,
         totalQuantities,
         qty,
+        setQty,
         incQty,
         decQty,
         onAdd,
-        toggleCartItemQuanitity,
+        toggleCartItemQuantity,
+        toggleCartItemQuanitity: toggleCartItemQuantity,
         onRemove,
         setCartItems,
         setTotalPrice,
-        setTotalQuantities 
+        setTotalQuantities
       }}
     >
       {children}
     </Context.Provider>
-  )
-}
+  );
+};
 
-export const useStateContext = () => useContext(Context);
+export const useStateContext = () => useContext(Context) || defaultState;

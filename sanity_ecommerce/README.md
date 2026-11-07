@@ -1,9 +1,35 @@
-# Sanity Clean Content Studio
+# SPARQ Sanity Studio
 
-Congratulations, you have now installed the Sanity Content Studio, an open source real-time content editing environment connected to the Sanity backend.
+Sanity Studio v2 for the SPARQ storefront.
 
-Now you can do the following things:
+- **Project ID:** `jruyr6l6`
+- **Dataset:** `production`
+- **Studio URL:** `http://localhost:3333`
 
-- [Read “getting started” in the docs](https://www.sanity.io/docs/introduction/getting-started?utm_source=readme)
-- [Join the community Slack](https://slack.sanity.io/?utm_source=readme)
-- [Extend and build plugins](https://www.sanity.io/docs/content-studio/extending?utm_source=readme)
+## Schemas
+
+- `schemas/product.js` — `image`, `name`, `slug`, `price`, `details`
+- `schemas/banner.js` — `image`, `buttonText`, `product`, `desc`, `smallText`, `midText`, `largeText1`, `largeText2`, `discount`, `saleTime`
+- `schemas/schema.js` — combines the document types
+
+## Run Locally
+
+```powershell
+npm install --legacy-peer-deps
+npm run start
+```
+
+On Node 17+ (including Node 24), if the Studio fails with `ERR_OSSL_EVP_UNSUPPORTED`:
+
+```powershell
+$env:NODE_OPTIONS="--openssl-legacy-provider"
+npm run start
+```
+
+## Build
+
+```powershell
+npm run build
+```
+
+The storefront reads content from the hosted Sanity Content Lake. Publishing here updates the content that the Next.js app fetches; the Studio does not need to run for the storefront to work.

@@ -27,6 +27,14 @@ yarn-error.log*
 
 # local env files
 .env*.local
+.env
 
 # vercel
 .vercel
+
+# test artifacts & automation profiles
+scripts/temp-*
+scripts/temp-profile
+.taste-skill
+.playwright-mcp
+.serena
