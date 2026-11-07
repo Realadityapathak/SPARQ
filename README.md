@@ -1,12 +1,18 @@
+<div align="center">
+
+<img src="public/brand/sparq-app-icon.png" width="96" height="96" alt="SPARQ App Icon" />
+
 # SPARQ
 
 > High-performance, headless e-commerce storefront for premium audio gear and wearables, powered by Next.js 12, Sanity CMS Studio, and Stripe Checkout.
 
-![Next.js](https://img.shields.io/badge/Next.js-12.1.0-black?style=flat-square&logo=next.js)
-![React](https://img.shields.io/badge/React-17.0.2-61DAFB?style=flat-square&logo=react&logoColor=black)
-![Sanity](https://img.shields.io/badge/Sanity-Studio%20v2-F03E2F?style=flat-square&logo=sanity&logoColor=white)
-![Stripe](https://img.shields.io/badge/Stripe-Checkout-635BFF?style=flat-square&logo=stripe&logoColor=white)
-![Node.js](https://img.shields.io/badge/Node.js-%3E%3D16.0.0-339933?style=flat-square&logo=node.js&logoColor=white)
+[![Next.js](https://img.shields.io/badge/Next.js-12.1.0-black?style=flat-square&logo=next.js)](https://nextjs.org/)
+[![React](https://img.shields.io/badge/React-17.0.2-61DAFB?style=flat-square&logo=react&logoColor=black)](https://reactjs.org/)
+[![Sanity](https://img.shields.io/badge/Sanity-Studio%20v2-F03E2F?style=flat-square&logo=sanity&logoColor=white)](https://www.sanity.io/)
+[![Stripe](https://img.shields.io/badge/Stripe-Checkout-635BFF?style=flat-square&logo=stripe&logoColor=white)](https://stripe.com/)
+[![Node.js](https://img.shields.io/badge/Node.js-%3E%3D16.0.0-339933?style=flat-square&logo=node.js&logoColor=white)](https://nodejs.org/)
+
+</div>
 
 ---
 
@@ -79,24 +85,40 @@ Traditional e-commerce platforms often suffer from slow server response times, h
 
 ## Demo & Visuals
 
-```text
-+-----------------------------------------------------------------------+
-|  SPARQ                  Shop   Support   Search              Bag (2)  |
-+-----------------------------------------------------------------------+
-|                                                                       |
-|  STUDIO SOUND                                      [ Gaming Headset ] |
-|  Precision Engineered Acoustic Drivers                     (Image)    |
-|  [ Shop the collection -> ]                                           |
-|                                                                       |
-+-----------------------------------------------------------------------+
-|  [ All Products ]  [ Headphones ]  [ Earbuds ]  [ Speakers ]  ...     |
-|                                                                       |
-|  +------------------+   +------------------+   +------------------+   |
-|  | Product Card 1   |   | Product Card 2   |   | Product Card 3   |   |
-|  | ₹1,599           |   | ₹2,499           |   | ₹999             |   |
-|  +------------------+   +------------------+   +------------------+   |
-+-----------------------------------------------------------------------+
-```
+### 1. Storefront Masthead & Editorial Hero
+The homepage opens with a dark luxury editorial masthead, featuring the custom SPARQ identity mark, multi-category navigation dropdowns, live search shortcut, and an interactive hero carousel highlighting flagship audio gear.
+
+![SPARQ Homepage Hero](public/screenshots/01-homepage-hero.png)
+
+---
+
+### 2. Live Catalogue Grid & Category Filter Tabs
+Interactive catalogue section featuring instant client-side category filtering (`All Products`, `Over-Ear Headphones`, `Wireless Earbuds`, `Speakers & Audio`, `Smart Wearables`, `Gaming`), real-time search filtering, and responsive product cards with formatted INR prices and quick-add actions.
+
+![SPARQ Catalogue Grid](public/screenshots/02-catalog-grid.png)
+
+---
+
+### 3. Dynamic Product Detail Page (PDP)
+Product pages feature high-resolution photography galleries, breadcrumb hierarchy, instant quantity selectors, value proposition badges (free delivery across India, one-year warranty, seven-day returns), and direct Stripe Checkout triggers.
+
+![SPARQ Product Detail Page](public/screenshots/03-product-detail.png)
+
+---
+
+### 4. Slide-Over Shopping Bag Drawer
+Accessible slide-over cart drawer with an animated free-delivery progress meter (calculating progress towards the ₹1,999 free shipping threshold), line-item quantity adjusters, instant price recalculation, and a secure "Check Out" action powered by Stripe.
+
+![SPARQ Cart Drawer](public/screenshots/04-cart-drawer.png)
+
+---
+
+### 5. Responsive Mobile Viewport
+Fully optimized mobile experience tailored for handheld touch devices (tested at 390×844), with an accessible slide-out navigation panel, compact hero banner, and touch-friendly product tiles.
+
+<p align="center">
+  <img src="public/screenshots/05-mobile-view.png" alt="SPARQ Mobile Viewport" width="380" />
+</p>
 
 *Storefront Brand Icon Asset*: `public/brand/sparq-app-icon.png`
 
@@ -166,7 +188,8 @@ SPARQ/
 │   └── terms-of-use.js         # Terms of service page
 ├── public/
 │   ├── avatars/                # Customer testimonial avatars (Aarav, Priya, Rohan)
-│   └── brand/                  # Vector and high-resolution SPARQ application icons
+│   ├── brand/                  # Vector and high-resolution SPARQ application icons
+│   └── screenshots/            # Real high-resolution storefront UI captures for documentation
 ├── sanity_ecommerce/           # Independent Sanity Studio v2 application
 │   ├── schemas/                # Sanity schema definitions (product.js, banner.js)
 │   ├── sanity.json             # Sanity project metadata and desk tool configuration
